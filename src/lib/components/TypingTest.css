@@ -1,0 +1,17 @@
+.mainContainer {
+    border: solid black 1px;
+    max-width: 40rem;
+}
+
+.textDisplay {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.textInput {
+    outline: none;
+    border: none;
+    color: green;
+
+    border: 3px solid orange;
+}

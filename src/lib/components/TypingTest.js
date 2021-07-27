@@ -11,7 +11,7 @@ const Button = (props) => {
     const words = wordList.english.map(word => {
         console.log("Word: ", word)
         return (
-            <span>{word}</span>
+            <span className="spacedWord">{word}</span>
         );
     }); 
 
@@ -30,6 +30,7 @@ const Button = (props) => {
                 <div>
                     <input type="text" spellCheck="false" 
                            autoComplete="off" className="textInput"/>
+                    <button>Redo</button>
                 </div>
             </div>
         </div>

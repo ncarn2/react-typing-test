@@ -1,17 +1,22 @@
-.spacedWord {
-    padding: 0 4px 0 4px;
-    font-size: 16px;
-    font-family: 'Verdana, sans-serif';
-}
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
 .mainContainer {
+    margin: auto;
+    font-family: 'Roboto Mono', monospace;
+
     border: solid black 1px;
     max-width: 40rem;
 }
 
-.textDisplay {
-    display: flex;
-    flex-wrap: wrap;
+.topBar {
+    margin-bottom: 12px;
+}
+
+.bottomBar {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 2fr 0.5fr;
+    text-align: center;
 }
 
 .textInput {
@@ -20,4 +25,14 @@
     color: green;
 
     border: 3px solid orange;
+}
+
+.spacedWord {
+    padding: 0 4px 0 4px;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.highlight {
+    color: red;
 }

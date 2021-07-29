@@ -13,12 +13,16 @@ class TypingTest extends React.Component {
         this.state = { 
             wordsToType: this.getRandomWordList(),
             currentWord: "",
+            currentCharIndex: 0,
             currentWordIndex: 0,
-            correctWords: 0,
+            correctChars: 0,
             hasStarted: false,
             wpm: 0,
             startTime: 0,
         };
+    }
+
+    componentDidMount() {
     }
 
     calculateWPM() {
@@ -26,7 +30,7 @@ class TypingTest extends React.Component {
 
         let elapsedTime = Math.floor((Date.now() - this.state.startTime) / 1000);
         console.log("elapsed time: ", elapsedTime);
-        let wpm = Math.floor((this.state.correctWords / elapsedTime) * 60);
+        let wpm = Math.floor((this.state.correctChars / elapsedTime) * 60);
         this.setState({wpm: wpm});
     }
 
@@ -37,36 +41,60 @@ class TypingTest extends React.Component {
         }
 
         let value = event.target.value;
+        this.setState({currentWord: value});
 
-        if (value[value.length - 1] === " ") {
+        let charToType = this.state.wordsToType[this.state.currentWordIndex].word[this.state.currentCharIndex] ?? " ";
 
-            let isCorrect = false;
+        console.log("char to type: ", charToType, " char index: ", this.state.currentCharIndex, "word index", this.state.currentWordIndex);
 
-            if (this.state.currentWord == this.state.wordsToType[this.state.currentWordIndex].word) {
-                isCorrect = true;
-                this.setState({correctWords: this.state.correctWords + 1});
-            }
-
-            this.state.wordsToType[this.state.currentWordIndex].class += isCorrect ? " correct" : " incorrect";
-
-            this.setState({currentWord: ""});
-
-            if (this.state.currentWordIndex + 1 == this.props.wordLimit) {
-                this.calculateWPM();
-            } else {
-                this.state.wordsToType[this.state.currentWordIndex + 1].class += " highlight";
-
-                this.setState({currentWordIndex: this.state.currentWordIndex + 1});
-            }
-        } else {
-            this.setState({currentWord: event.target.value});
+        let isCorrect = false;
+        if (value[value.length - 1] == charToType) {
+            isCorrect = true;
+            this.setState({correctChars: this.state.correctChars + 1});
         }
+
+        this.state.wordsToType[this.state.currentWordIndex].class += isCorrect ? " correct" : " incorrect";
+
+        if (value[value.length - 1] == " ") {
+            console.log('new state');
+
+            this.setState({
+                currentCharIndex: 0,
+                currentWordIndex: this.state.currentWordIndex + 1,
+                currentWord: "",
+            });
+        } else {
+            this.setState({currentCharIndex: this.state.currentCharIndex + 1});
+        }
+
+        // if (value[value.length - 1] === " ") {
+
+        //     let isCorrect = false;
+
+        //     if (this.state.currentWord == this.state.wordsToType[].word) {
+        //         isCorrect = true;
+        //     }
+
+        //     this.state.wordsToType[].class += isCorrect ? " correct" : " incorrect";
+
+        //     this.setState({currentWord: ""});
+
+        //     if () {
+        //         this.calculateWPM();
+        //     } else {
+        //         this.state.wordsToType[].class += " highlight";
+
+        //         this.setState({});
+        //     }
+        // } else {
+        //     this.setState({currentWord: event.target.value});
+        // }
     }
 
     redo() {
         this.setState({
          wordsToType: this.getRandomWordList(),
-         currentWordIndex: 0,
+         currentCharIndex: 0,
          currentWord: "",
         });
 
@@ -123,7 +151,7 @@ class TypingTest extends React.Component {
 }
 
 TypingTest.defaultProps = {
-    wordLimit: 30,
+    wordLimit: 5,
     language: 'english',
 }
 

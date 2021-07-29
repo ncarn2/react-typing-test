@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 
 import './TypingTest.css'
 import wordList from './words.json'
@@ -15,16 +14,29 @@ class TypingTest extends React.Component {
             wordsToType: this.getRandomWordList(),
             currentWord: "",
             currentWordIndex: 0,
+            correctWords: 0,
+            hasStarted: false,
+            wpm: 0,
+            startTime: 0,
         };
     }
 
     calculateWPM() {
-        console.log("calculating wpm");
+        // TODO: track characters not words and use that / 5 to get WPM
+
+        let elapsedTime = Math.floor((Date.now() - this.state.startTime) / 1000);
+        console.log("elapsed time: ", elapsedTime);
+        let wpm = Math.floor((this.state.correctWords / elapsedTime) * 60);
+        this.setState({wpm: wpm});
     }
 
     updateWord(event) {
-        let value = event.target.value;
+        if (!this.state.hasStarted) {
+            this.setState({hasStarted: true});
+            this.setState({startTime: Date.now()});
+        }
 
+        let value = event.target.value;
 
         if (value[value.length - 1] === " ") {
 
@@ -32,6 +44,7 @@ class TypingTest extends React.Component {
 
             if (this.state.currentWord == this.state.wordsToType[this.state.currentWordIndex].word) {
                 isCorrect = true;
+                this.setState({correctWords: this.state.correctWords + 1});
             }
 
             this.state.wordsToType[this.state.currentWordIndex].class += isCorrect ? " correct" : " incorrect";
@@ -102,7 +115,7 @@ class TypingTest extends React.Component {
                             autoComplete="off" className="textInput"/>
                         <button onClick={this.redo}>Redo</button>
                     </div>
-                    <div>Word:{this.state.currentWord}</div>
+                    <div>{this.state.wpm} w.p.m.</div>
                 </section>
             </div>
         )
@@ -110,7 +123,7 @@ class TypingTest extends React.Component {
 }
 
 TypingTest.defaultProps = {
-    wordLimit: 3,
+    wordLimit: 30,
     language: 'english',
 }
 

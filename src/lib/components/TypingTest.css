@@ -22,9 +22,9 @@
 .textInput {
     outline: none;
     border: none;
-    color: green;
 
-    border: 3px solid orange;
+    border: 3px solid grey;
+    border-radius: 2px;
 }
 
 .spacedWord {
@@ -34,5 +34,13 @@
 }
 
 .highlight {
+    color: orange;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
     color: red;
 }

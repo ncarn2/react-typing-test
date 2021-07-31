@@ -13,7 +13,7 @@ import { TypingTest } from 'react-typing-test';
 
 const Something = (props) => {
     return (
-        <TypingTest language="english"/>
+        <TypingTest language="english" wordLimit={120} />
     )
 }
 
@@ -22,8 +22,26 @@ export default Something;
 ```
 
 
-## Configuration
+## Available Props
 
-TODO: 
+```js 
+wordLimit: {
+    type: Number
+    default: 50
+}
+```
 
-language, word count, timer, themes, ...
+```js 
+language: {
+    type: String
+    default: 'english'
+}
+```
+
+## Roadmap
+
+- [x] word count
+- [x] language (untested)
+- [ ] timer
+- [ ] themes
+- [ ] refactor (the ongoing battle)

@@ -1,11 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
+:root {
+    --main-background-color: #2E2C2F;
+    --alt-background-color: #3B4449;
+    --main-text-color: white;
+    --main-highlight-color: yellow; 
+    --correct-color:  #BACDB0;
+    --incorrect-color: red;
+}
+
 .mainContainer {
     margin: auto;
     font-family: 'Roboto Mono', monospace;
 
-    border: solid black 1px;
+    border-radius: 12px;
     max-width: 40rem;
+
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+    
+    padding: 12px;
 }
 
 .topBar {
@@ -23,8 +37,35 @@
     outline: none;
     border: none;
 
-    border: 3px solid grey;
+    background-color: var(--alt-background-color);
+    color: var(--main-text-color);
+
+    max-width: 90%;
     border-radius: 2px;
+    caret-color: white;
+}
+
+.textInput:focus {
+    border: 1px solid var(--main-highlight-color);
+}
+
+.reactTypingTestButton {
+    color: var(--main-text-color);
+    background-color: var(--alt-background-color);
+
+    outline: none;
+    border: none;
+
+    padding: 4px;
+
+    min-height: 25px;
+
+    border-radius: 12px;
+}
+
+.reactTypingTestButton:hover, .reactTypingTestButton:focus {
+    cursor: pointer;
+    color: var(--correct-color);
 }
 
 .spacedWord {
@@ -34,13 +75,13 @@
 }
 
 .highlight {
-    color: orange;
+    color: var(--main-highlight-color);
 }
 
 .correct {
-    color: green;
+    color: var(--correct-color);
 }
 
 .incorrect {
-    color: red;
+    color: var(--incorrect-color);
 }

@@ -21,7 +21,6 @@ export default Something;
 
 ```
 
-
 ## Available Props
 
 ```js 

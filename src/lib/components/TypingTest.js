@@ -37,7 +37,8 @@ class TypingTest extends React.Component {
         let randomWords = [];
 
         while (i < this.props.wordLimit) {
-            let word = wordList[this.props.language][Math.floor(Math.random() * wordCount + 1)]
+            let random = Math.random();
+            let word = wordList[this.props.language][Math.floor(random * wordCount)]
 
             randomWords.push({ 
                 word: word, 
@@ -62,12 +63,12 @@ class TypingTest extends React.Component {
 
         if (value[value.length - 1] === " ") {
             await this.moveToNextWord();
-            this.state.wordsToType[this.state.currentWordIndex].class += " highlight";
+            this.state.wordsToType[this.state.currentWordIndex].class = "spaceWord highlight";
         } else {
             await this.setState({currentWord: value});
+            await this.handleKeyPress();
         }
 
-        await this.handleKeyPress();
     }
 
     async moveToNextWord() {
@@ -84,14 +85,13 @@ class TypingTest extends React.Component {
     async handleKeyPress() {
         let currentWord = this.state.currentWord;
         let wordToType = this.state.wordsToType[this.state.currentWordIndex].word;
-        let charIndex = currentWord.length - 1;
-
-        let charToType = wordToType[charIndex];
-        let currentChar = currentWord[charIndex]; 
+        let charIndex = currentWord.length;
 
         let wordsToType = this.state.wordsToType;
 
-        if (charToType === currentChar) {
+        let wordsAreEqual = currentWord.slice(0, charIndex) === wordToType.slice(0, charIndex);
+
+        if (wordsAreEqual) {
             wordsToType[this.state.currentWordIndex].class = "spacedWord correct"
             this.setState({
                 correctChars: this.state.correctChars + 1
@@ -154,7 +154,7 @@ class TypingTest extends React.Component {
                             value={this.state.currentWord}
                             onChange={this.updateWord}
                             autoComplete="off" className="textInput"/>
-                        <button onClick={this.reset}>Redo</button>
+                        <button className="reactTypingTestButton" onClick={this.reset}>Redo</button>
                     </div>
                     <div>{this.state.wpm} w.p.m.</div>
                 </section>

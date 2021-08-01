@@ -3,18 +3,24 @@
 :root {
     --main-background-color: #2E2C2F;
     --alt-background-color: #3B4449;
-    --main-text-color: white;
-    --main-highlight-color: yellow; 
-    --correct-color:  #BACDB0;
-    --incorrect-color: red;
+
+    --main-text-color: #E5D4ED;
+    --main-highlight-color: #AA7BC3; 
+
+    --correct-text-color:  #944BBB;
+    --incorrect-text-color: #A54657;
+
+    --correct-input-color:  #944BBB;
+    --incorrect-input-color: #A54657;
 }
 
-.mainContainer {
+#react-typing-test-container {
     margin: auto;
     font-family: 'Roboto Mono', monospace;
 
     border-radius: 12px;
     max-width: 40rem;
+    min-width: 25rem;
 
     background-color: var(--main-background-color);
     color: var(--main-text-color);
@@ -33,7 +39,7 @@
     text-align: center;
 }
 
-.textInput {
+#react-typing-test-input {
     outline: none;
     border: none;
 
@@ -45,11 +51,15 @@
     caret-color: white;
 }
 
-.textInput:focus {
+#react-typing-test-input.incorrect {
+    background-color: var(--incorrect-input-color);
+}
+
+#react-typing-test-input:focus, #react-typing-test-input:hover {
     border: 1px solid var(--main-highlight-color);
 }
 
-.reactTypingTestButton {
+#react-typing-test-button {
     color: var(--main-text-color);
     background-color: var(--alt-background-color);
 
@@ -63,9 +73,9 @@
     border-radius: 12px;
 }
 
-.reactTypingTestButton:hover, .reactTypingTestButton:focus {
+#react-typing-test-button:hover, #react-typing-test-button:focus {
     cursor: pointer;
-    color: var(--correct-color);
+    color: var(--main-highlight-color);
 }
 
 .spacedWord {
@@ -79,9 +89,9 @@
 }
 
 .correct {
-    color: var(--correct-color);
+    color: var(--correct-text-color);
 }
 
 .incorrect {
-    color: var(--incorrect-color);
+    color: var(--incorrect-text-color);
 }

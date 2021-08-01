@@ -92,15 +92,16 @@ class TypingTest extends React.Component {
         let wordsAreEqual = currentWord.slice(0, charIndex) === wordToType.slice(0, charIndex);
 
         if (wordsAreEqual) {
+            document.querySelector("#react-typing-test-input").classList.remove("incorrect");
+
             wordsToType[this.state.currentWordIndex].class = "spacedWord correct"
             this.setState({
                 correctChars: this.state.correctChars + 1
             });
         } else {
+            document.querySelector("#react-typing-test-input").classList.add("incorrect");
+
             wordsToType[this.state.currentWordIndex].class = "spacedWord incorrect"
-            this.setState({
-                correctChars: this.state.correctChars - 1
-            });
         }
 
         this.setState({
@@ -117,10 +118,14 @@ class TypingTest extends React.Component {
 
         let wpm = Math.floor((this.state.correctChars / 5) / elapsedMinutes);
 
-        await this.setState({wpm: wpm});
+        await this.setState({
+            wpm: wpm,
+        });
     }
 
     async reset() {
+        document.querySelector("#react-typing-test-input").classList.remove("incorrect");
+
         await this.setState({
             wordsToType: this.getRandomWordList(),
             currentWord: "",
@@ -136,7 +141,7 @@ class TypingTest extends React.Component {
 
     render() {
         return (
-            <div className="mainContainer">
+            <div id="react-typing-test-container">
 
                 <div className="topBar"></div>
 
@@ -154,7 +159,7 @@ class TypingTest extends React.Component {
                             value={this.state.currentWord}
                             onChange={this.updateWord}
                             autoComplete="off" className="textInput"/>
-                        <button className="reactTypingTestButton" onClick={this.reset}>Redo</button>
+                        <button id="react-typing-test-button" onClick={this.reset}>Redo</button>
                     </div>
                     <div>{this.state.wpm} w.p.m.</div>
                 </section>
@@ -164,7 +169,7 @@ class TypingTest extends React.Component {
 }
 
 TypingTest.defaultProps = {
-    wordLimit: 50,
+    wordLimit: 25,
     language: 'english',
 }
 

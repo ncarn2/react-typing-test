@@ -1,7 +1,7 @@
 import React from 'react';
 import { getRandomWordList } from '../util/wordListGenerator';
 
-import './TypingTest.css'
+import { MainContainer, Input, RedoButton, BottomBar, Word } from './style';
 
 class TypingTest extends React.Component {
     constructor(props) {
@@ -11,7 +11,6 @@ class TypingTest extends React.Component {
         this.moveToNextWord = this.moveToNextWord.bind(this);
         this.end = this.end.bind(this);
         this.reset = this.reset.bind(this);
-        this.calculateWPM = this.calculateWPM.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = { 
@@ -21,6 +20,7 @@ class TypingTest extends React.Component {
             correctChars: 0,
             hasStarted: false,
             wpm: 0,
+            accuracy: 0,
             startTime: 0,
         };
     }
@@ -28,7 +28,6 @@ class TypingTest extends React.Component {
     componentDidMount() {
         document.querySelector("#react-typing-test-input").focus();
     }
-
 
     async updateWord(event) {
         let value = event.target.value
@@ -95,16 +94,21 @@ class TypingTest extends React.Component {
         this.setState({
             hasStarted: false,
         });
-        await this.calculateWPM();
-    }
 
-    async calculateWPM() {
         let elapsedMinutes = ((Date.now() - this.state.startTime) / 1000) / 60;
 
         let wpm = Math.floor((this.state.correctChars / 5) / elapsedMinutes);
 
+        let charsToType = 0;
+        this.state.wordsToType.forEach(word => {
+            charsToType += word.word.length + 1;
+        });
+
+        let accuracy = Math.round(100 * (this.state.correctChars / charsToType));
+
         await this.setState({
             wpm: wpm,
+            accuracy: accuracy,
         });
     }
 
@@ -118,6 +122,7 @@ class TypingTest extends React.Component {
             correctChars: 0,
             hasStarted: false,
             wpm: 0,
+            accuracy: 0,
             startTime: 0,
         });
 
@@ -126,29 +131,29 @@ class TypingTest extends React.Component {
 
     render() {
         return (
-            <div id="react-typing-test-container">
+            <MainContainer>
 
-                <div className="topBar"></div>
+                <div>
+                    {this.state.wordsToType.map(randWord => {
+                        return (
+                            <Word className={`spacedWord ${randWord.class}`}>{randWord.word}</Word>
+                        )
+                    })}
+                </div>
 
-                <section className="typingArea">
-                    <div className="wordArea">
-                        {this.state.wordsToType.map(randWord => {
-                            return (
-                                <span className={`spacedWord ${randWord.class}`}>{randWord.word}</span>
-                            )
-                        })}
-                    </div>
-                    <div className="bottomBar">
-                        <input type="text" spellCheck="false" 
-                            id="react-typing-test-input"
-                            value={this.state.currentWord}
-                            onChange={this.updateWord}
-                            autoComplete="off" className="textInput"/>
-                        <button id="react-typing-test-button" onClick={this.reset}>Redo</button>
-                    </div>
-                    <div>{this.state.wpm} w.p.m.</div>
-                </section>
-            </div>
+                <BottomBar>
+                    <Input type="text" spellCheck="false" 
+                        id="react-typing-test-input"
+                        value={this.state.currentWord}
+                        onChange={this.updateWord}
+                        autoComplete="off" 
+                        />
+                    <RedoButton id="react-typing-test-button" onClick={this.reset}>Redo</RedoButton>
+                </BottomBar>
+
+                <span>WPM: {this.state.wpm} </span>
+                <span>ACC: {this.state.accuracy}%</span>
+            </MainContainer>
         )
     }
 }

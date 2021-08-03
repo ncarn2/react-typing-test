@@ -5,140 +5,152 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+require("core-js/modules/es.promise.js");
+
 var _react = _interopRequireDefault(require("react"));
 
-require("./TypingTest.css");
+var _wordListGenerator = require("../util/wordListGenerator");
 
-var _words = _interopRequireDefault(require("./words.json"));
+var _style = require("./style");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class TypingTest extends _react.default.Component {
   constructor(props) {
     super(props);
-    this.redo = this.redo.bind(this);
     this.updateWord = this.updateWord.bind(this);
+    this.moveToNextWord = this.moveToNextWord.bind(this);
+    this.end = this.end.bind(this);
+    this.reset = this.reset.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = {
-      wordsToType: this.getRandomWordList(),
+      wordsToType: (0, _wordListGenerator.getRandomWordList)(this.props.language, this.props.wordLimit),
       currentWord: "",
       currentWordIndex: 0,
-      correctWords: 0,
+      correctChars: 0,
       hasStarted: false,
       wpm: 0,
+      accuracy: 0,
       startTime: 0
     };
   }
 
-  calculateWPM() {
-    // TODO: track characters not words and use that / 5 to get WPM
-    let elapsedTime = Math.floor((Date.now() - this.state.startTime) / 1000);
-    console.log("elapsed time: ", elapsedTime);
-    let wpm = Math.floor(this.state.correctWords / elapsedTime * 60);
-    this.setState({
-      wpm: wpm
-    });
+  componentDidMount() {
+    document.querySelector("#react-typing-test-input").focus();
   }
 
-  updateWord(event) {
-    if (!this.state.hasStarted) {
-      this.setState({
-        hasStarted: true
-      });
-      this.setState({
-        startTime: Date.now()
-      });
-    }
-
+  async updateWord(event) {
     let value = event.target.value;
 
-    if (value[value.length - 1] === " ") {
-      let isCorrect = false;
-
-      if (this.state.currentWord == this.state.wordsToType[this.state.currentWordIndex].word) {
-        isCorrect = true;
-        this.setState({
-          correctWords: this.state.correctWords + 1
-        });
-      }
-
-      this.state.wordsToType[this.state.currentWordIndex].class += isCorrect ? " correct" : " incorrect";
+    if (!this.state.hasStarted) {
       this.setState({
+        startTime: Date.now(),
+        hasStarted: true
+      });
+    }
+
+    if (value[value.length - 1] === " ") {
+      await this.setState({
+        correctChars: this.state.correctChars + 1
+      });
+      await this.moveToNextWord();
+      this.state.wordsToType[this.state.currentWordIndex].class = "spaceWord highlight";
+    } else {
+      await this.setState({
+        currentWord: value
+      });
+      await this.handleKeyPress();
+    }
+  }
+
+  async moveToNextWord() {
+    if (this.state.currentWordIndex === this.props.wordLimit - 1) {
+      await this.end();
+    } else {
+      await this.setState({
+        currentWordIndex: this.state.currentWordIndex + 1,
         currentWord: ""
       });
+    }
+  }
 
-      if (this.state.currentWordIndex + 1 == this.props.wordLimit) {
-        this.calculateWPM();
-      } else {
-        this.state.wordsToType[this.state.currentWordIndex + 1].class += " highlight";
-        this.setState({
-          currentWordIndex: this.state.currentWordIndex + 1
-        });
-      }
-    } else {
+  async handleKeyPress() {
+    let currentWord = this.state.currentWord;
+    let wordToType = this.state.wordsToType[this.state.currentWordIndex].word;
+    let charIndex = currentWord.length;
+    let wordsToType = this.state.wordsToType;
+    let wordsAreEqual = currentWord.slice(0, charIndex) === wordToType.slice(0, charIndex);
+
+    if (wordsAreEqual) {
+      document.querySelector("#react-typing-test-input").classList.remove("incorrect");
+      wordsToType[this.state.currentWordIndex].class = "spacedWord correct";
       this.setState({
-        currentWord: event.target.value
+        correctChars: this.state.correctChars + 1
       });
+    } else {
+      document.querySelector("#react-typing-test-input").classList.add("incorrect");
+      wordsToType[this.state.currentWordIndex].class = "spacedWord incorrect";
     }
-  }
 
-  redo() {
     this.setState({
-      wordsToType: this.getRandomWordList(),
-      currentWordIndex: 0,
-      currentWord: ""
+      wordsToType: wordsToType
     });
-    document.querySelector("input").focus();
   }
 
-  getRandomWordList() {
-    let wordCount = _words.default[this.props.language].length;
-    let i = 0;
-    let randomWords = [];
+  async end() {
+    this.setState({
+      hasStarted: false
+    });
+    let elapsedMinutes = (Date.now() - this.state.startTime) / 1000 / 60;
+    let wpm = Math.floor(this.state.correctChars / 5 / elapsedMinutes);
+    let charsToType = 0;
+    this.state.wordsToType.forEach(word => {
+      charsToType += word.word.length + 1;
+    });
+    let accuracy = Math.round(100 * (this.state.correctChars / charsToType));
+    await this.setState({
+      wpm: wpm,
+      accuracy: accuracy
+    });
+  }
 
-    while (i < this.props.wordLimit) {
-      let word = _words.default[this.props.language][Math.floor(Math.random() * wordCount + 1)];
-
-      randomWords.push({
-        word: word,
-        class: i == 0 ? "highlight" : ""
-      });
-      i += 1;
-    }
-
-    return randomWords;
+  async reset() {
+    document.querySelector("#react-typing-test-input").classList.remove("incorrect");
+    await this.setState({
+      wordsToType: (0, _wordListGenerator.getRandomWordList)(this.props.language, this.props.wordLimit),
+      currentWord: "",
+      currentWordIndex: 0,
+      correctChars: 0,
+      hasStarted: false,
+      wpm: 0,
+      accuracy: 0,
+      startTime: 0
+    });
+    document.querySelector("#react-typing-test-input").focus();
   }
 
   render() {
-    return /*#__PURE__*/_react.default.createElement("div", {
-      className: "mainContainer"
-    }, /*#__PURE__*/_react.default.createElement("div", {
-      className: "topBar"
-    }), /*#__PURE__*/_react.default.createElement("section", {
-      className: "typingArea"
-    }, /*#__PURE__*/_react.default.createElement("div", {
-      className: "wordArea"
-    }, this.state.wordsToType.map(randWord => {
-      return /*#__PURE__*/_react.default.createElement("span", {
+    return /*#__PURE__*/_react.default.createElement(_style.MainContainer, null, /*#__PURE__*/_react.default.createElement("div", null, this.state.wordsToType.map(randWord => {
+      return /*#__PURE__*/_react.default.createElement(_style.Word, {
         className: "spacedWord ".concat(randWord.class)
       }, randWord.word);
-    })), /*#__PURE__*/_react.default.createElement("div", {
-      className: "bottomBar"
-    }, /*#__PURE__*/_react.default.createElement("input", {
+    })), /*#__PURE__*/_react.default.createElement(_style.BottomBar, null, /*#__PURE__*/_react.default.createElement(_style.Input, {
       type: "text",
       spellCheck: "false",
+      id: "react-typing-test-input",
       value: this.state.currentWord,
       onChange: this.updateWord,
-      autoComplete: "off",
-      className: "textInput"
-    }), /*#__PURE__*/_react.default.createElement("button", {
-      onClick: this.redo
-    }, "Redo")), /*#__PURE__*/_react.default.createElement("div", null, this.state.wpm, " w.p.m.")));
+      autoComplete: "off"
+    }), /*#__PURE__*/_react.default.createElement(_style.RedoButton, {
+      id: "react-typing-test-button",
+      onClick: this.reset
+    }, "Redo")), /*#__PURE__*/_react.default.createElement("span", null, "WPM: ", this.state.wpm, " "), /*#__PURE__*/_react.default.createElement("span", null, "ACC: ", this.state.accuracy, "%"));
   }
 
 }
 
 TypingTest.defaultProps = {
-  wordLimit: 30,
+  wordLimit: 50,
   language: 'english'
 };
 var _default = TypingTest;

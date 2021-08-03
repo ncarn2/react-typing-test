@@ -39,6 +39,24 @@ language: {
 }
 ```
 
+## TODO
+increase specificity: 
+```js
+const MyStyledComponent = styled(AlreadyStyledComponent)`
+  &&& {
+    color: palevioletred;
+    font-weight: bold;
+  }
+`
+```
+
+use a different font:
+```css
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+```
+
+
+
 ## Roadmap
 
 - [x] word count

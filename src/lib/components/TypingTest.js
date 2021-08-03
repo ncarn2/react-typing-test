@@ -1,7 +1,7 @@
 import React from 'react';
+import { getRandomWordList } from '../util/wordListGenerator';
 
 import './TypingTest.css'
-import wordList from './words.json'
 
 class TypingTest extends React.Component {
     constructor(props) {
@@ -15,7 +15,7 @@ class TypingTest extends React.Component {
         this.handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = { 
-            wordsToType: this.getRandomWordList(),
+            wordsToType: getRandomWordList(this.props.language, this.props.wordLimit),
             currentWord: "",
             currentWordIndex: 0,
             correctChars: 0,
@@ -29,27 +29,6 @@ class TypingTest extends React.Component {
         document.querySelector("#react-typing-test-input").focus();
     }
 
-    getRandomWordList() {
-        let wordCount = wordList[this.props.language].length;
-
-        let i = 0;
-
-        let randomWords = [];
-
-        while (i < this.props.wordLimit) {
-            let random = Math.random();
-            let word = wordList[this.props.language][Math.floor(random * wordCount)]
-
-            randomWords.push({ 
-                word: word, 
-                class: i === 0 ? "highlight" : ""
-            });
-
-            i += 1;
-        }
-
-        return randomWords;
-    }
 
     async updateWord(event) {
         let value = event.target.value
@@ -62,6 +41,9 @@ class TypingTest extends React.Component {
         }
 
         if (value[value.length - 1] === " ") {
+            await this.setState({
+                correctChars: this.state.correctChars + 1, 
+            });
             await this.moveToNextWord();
             this.state.wordsToType[this.state.currentWordIndex].class = "spaceWord highlight";
         } else {
@@ -110,6 +92,9 @@ class TypingTest extends React.Component {
     }
 
     async end() {
+        this.setState({
+            hasStarted: false,
+        });
         await this.calculateWPM();
     }
 
@@ -127,7 +112,7 @@ class TypingTest extends React.Component {
         document.querySelector("#react-typing-test-input").classList.remove("incorrect");
 
         await this.setState({
-            wordsToType: this.getRandomWordList(),
+            wordsToType: getRandomWordList(this.props.language, this.props.wordLimit),
             currentWord: "",
             currentWordIndex: 0,
             correctChars: 0,
@@ -169,7 +154,7 @@ class TypingTest extends React.Component {
 }
 
 TypingTest.defaultProps = {
-    wordLimit: 25,
+    wordLimit: 50,
     language: 'english',
 }
 

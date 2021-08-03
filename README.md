@@ -1,5 +1,7 @@
 # React Typing Test
 
+![example workflow](https://github.com/ncarn2/react-typing-test/actions/workflows/node.js.yml/badge.svg)
+
 ## Usage
 
 ``` 

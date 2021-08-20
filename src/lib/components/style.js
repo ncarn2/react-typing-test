@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
+import RobotoMonoTTF from '../assets/RobotoMono-Medium.ttf';
 
 let mainBackgroundColor = "#2E2C2F";
 let altBackgroundColor = "#3B4449";
@@ -11,6 +13,17 @@ let incorrectTextColor = "#A54657";
 
 let correctInputColor =  "#944BBB";
 let incorrectInputColor = "#A54657";
+
+export const GlobalStyle = createGlobalStyle`
+    @font-face {
+        font-family: 'Roboto Mono';
+        src: url(${RobotoMonoTTF}) format('truetype');
+    }
+
+    * {
+        font-family: 'Roboto Mono';
+    }
+`;
 
 export const MainContainer = styled.div`
     margin: auto;

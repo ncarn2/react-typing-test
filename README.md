@@ -39,22 +39,12 @@ language: {
 }
 ```
 
-## TODO
-increase specificity: 
 ```js
-const MyStyledComponent = styled(AlreadyStyledComponent)`
-  &&& {
-    color: palevioletred;
-    font-weight: bold;
-  }
-`
+theme: {
+    type: String
+    default: 'Purpleish'
+}
 ```
-
-use a different font:
-```css
-@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
-```
-
 
 
 ## Roadmap
@@ -62,4 +52,4 @@ use a different font:
 - [x] word count
 - [x] language (untested)
 - [x] themes
-- [ ] refactor (the ongoing battle)
+- [ ] Clean and Refactor ...

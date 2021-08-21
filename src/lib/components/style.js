@@ -2,18 +2,6 @@ import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 import RobotoMonoTTF from '../assets/RobotoMono-Medium.ttf';
 
-let mainBackgroundColor = "#2E2C2F";
-let altBackgroundColor = "#3B4449";
-
-let mainTextColor = "#E5D4ED";
-let mainHighlightColor = "#AA7BC3"; 
-
-let correctTextColor =  "#944BBB";
-let incorrectTextColor = "#A54657";
-
-let correctInputColor =  "#944BBB";
-let incorrectInputColor = "#A54657";
-
 export const GlobalStyle = createGlobalStyle`
     @font-face {
         font-family: 'Roboto Mono';
@@ -33,8 +21,8 @@ export const MainContainer = styled.div`
     max-width: 40rem;
     min-width: 25rem;
 
-    background-color: ${mainBackgroundColor};
-    color: ${mainTextColor};
+    background-color: ${props => props.theme.mainBackgroundColor};
+    color: ${props => props.theme.mainTextColor};
     
     padding: 12px;
 ;`
@@ -43,25 +31,26 @@ export const Input = styled.input`
     outline: none;
     border: none;
 
-    background-color: ${altBackgroundColor};
-    color: ${mainTextColor};
+    background-color: ${props => props.theme.altBackgroundColor};
+    color: ${props => props.theme.mainHighlightColor};
 
+    font-size: 15px;
     max-width: 90%;
     border-radius: 2px;
     caret-color: white;
 
     &.incorrect {
-        background-color: ${incorrectInputColor};
+        background-color: ${props => props.theme.incorrectColor};
     }
 
     &:focus, &:hover {
-        border: 1px solid ${mainHighlightColor};
+        border: 1px solid ${props => props.theme.mainHighlightColor};
     }
 `;
 
 export const RedoButton = styled.button`
-    color: ${mainTextColor};
-    background-color: ${altBackgroundColor};
+    color: ${props => props.theme.mainTextColor};
+    background-color: ${props => props.theme.altBackgroundColor};
 
     outline: none;
     border: none;
@@ -74,7 +63,7 @@ export const RedoButton = styled.button`
 
     &:hover, &:focus {
         cursor: pointer;
-        color: ${mainHighlightColor};
+        color: ${props => props.theme.mainHighlightColor};
     }
 `;
 
@@ -91,14 +80,14 @@ export const Word = styled.span`
     display: inline-block;
 
     &.highlight {
-        color: ${mainHighlightColor};
+        color: ${props => props.theme.mainHighlightColor};
     }
 
     &.correct {
-        color: ${correctTextColor};
+        color: ${props => props.theme.correctColor};
     }
 
     &.incorrect {
-        color: ${incorrectTextColor};
+        color: ${props => props.theme.incorrectColor};
     }
 `;

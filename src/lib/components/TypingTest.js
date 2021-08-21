@@ -1,7 +1,7 @@
 import React from 'react';
 import { getRandomWordList } from '../util/wordListGenerator';
 
-import { MainContainer, Input, RedoButton, BottomBar, Word } from './style';
+import { MainContainer, Input, RedoButton, BottomBar, Word, GlobalStyle } from './style';
 
 class TypingTest extends React.Component {
     constructor(props) {
@@ -54,6 +54,7 @@ class TypingTest extends React.Component {
 
     async moveToNextWord() {
         if (this.state.currentWordIndex === this.props.wordLimit - 1) {
+            console.log("This is done")
             await this.end();
         } else {
             await this.setState({
@@ -130,30 +131,34 @@ class TypingTest extends React.Component {
     }
 
     render() {
+        const Theme = require(`../themes/${this.props.theme}.js`).default;
+
         return (
-            <MainContainer>
+            <Theme>
+                <MainContainer>
+                    <GlobalStyle />
+                    <div>
+                        {this.state.wordsToType.map(randWord => {
+                            return (
+                                <Word className={`spacedWord ${randWord.class}`}>{randWord.word}</Word>
+                            )
+                        })}
+                    </div>
 
-                <div>
-                    {this.state.wordsToType.map(randWord => {
-                        return (
-                            <Word className={`spacedWord ${randWord.class}`}>{randWord.word}</Word>
-                        )
-                    })}
-                </div>
+                    <BottomBar>
+                        <Input type="text" spellCheck="false" 
+                            id="react-typing-test-input"
+                            value={this.state.currentWord}
+                            onChange={this.updateWord}
+                            autoComplete="off" 
+                            />
+                        <RedoButton id="react-typing-test-button" onClick={this.reset}>Redo</RedoButton>
+                    </BottomBar>
 
-                <BottomBar>
-                    <Input type="text" spellCheck="false" 
-                        id="react-typing-test-input"
-                        value={this.state.currentWord}
-                        onChange={this.updateWord}
-                        autoComplete="off" 
-                        />
-                    <RedoButton id="react-typing-test-button" onClick={this.reset}>Redo</RedoButton>
-                </BottomBar>
-
-                <span>WPM: {this.state.wpm} </span>
-                <span>ACC: {this.state.accuracy}%</span>
-            </MainContainer>
+                    <span>WPM: {this.state.wpm} </span>
+                    <span>ACC: {this.state.accuracy}%</span>
+                </MainContainer>
+            </Theme>
         )
     }
 }
@@ -161,6 +166,7 @@ class TypingTest extends React.Component {
 TypingTest.defaultProps = {
     wordLimit: 50,
     language: 'english',
+    theme: 'Purpleish'
 }
 
 export default TypingTest; 

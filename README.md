@@ -61,6 +61,5 @@ use a different font:
 
 - [x] word count
 - [x] language (untested)
-- [ ] timer
-- [ ] themes
+- [x] themes
 - [ ] refactor (the ongoing battle)

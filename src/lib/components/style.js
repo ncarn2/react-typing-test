@@ -13,7 +13,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 `;
 
-export const MainContainer = styled.div`
+const _MainContainer = styled.div`
     margin: auto;
     font-family: 'Helvetica', 'sans-serif';
 
@@ -27,7 +27,7 @@ export const MainContainer = styled.div`
     padding: 12px;
 ;`
 
-export const Input = styled.input`
+const _Input = styled.input`
     outline: none;
     border: none;
 
@@ -48,7 +48,8 @@ export const Input = styled.input`
     }
 `;
 
-export const RedoButton = styled.button`
+
+const _RedoButton = styled.button`
     color: ${props => props.theme.mainTextColor};
     background-color: ${props => props.theme.altBackgroundColor};
 
@@ -67,14 +68,14 @@ export const RedoButton = styled.button`
     }
 `;
 
-export const BottomBar = styled.div`
+const _BottomBar = styled.div`
     margin-top: 12px;
     display: grid;
     grid-template-columns: 2fr 0.5fr;
     text-align: center;
 `;
 
-export const Word = styled.span`
+const _Word = styled.span`
     padding: 0 4px 0 4px;
     font-size: 16px;
     display: inline-block;
@@ -90,4 +91,22 @@ export const Word = styled.span`
     &.incorrect {
         color: ${props => props.theme.incorrectColor};
     }
+`;
+
+// SPECIFICITY :)
+
+export const Input = styled(_Input)`
+ &&&& { }
+`
+export const MainContainer = styled(_MainContainer)`
+ &&&& { }
+`;
+export const RedoButton = styled(_RedoButton)`
+ &&&& { }
+`; 
+export const BottomBar = styled(_BottomBar)`
+ &&&& { }
+`;
+export const Word = styled(_Word)`
+ &&&& { }
 `;

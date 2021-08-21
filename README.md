@@ -45,7 +45,12 @@ theme: {
     default: 'Purpleish'
 }
 ```
+## TODO
 
+Fix the themes:
+- main text color and input color should be different
+- correct vs incorrect colors aren't always great
+- maybe some gradients
 
 ## Roadmap
 

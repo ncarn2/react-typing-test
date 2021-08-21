@@ -5,7 +5,7 @@ const theme = {
     altBackgroundColor: "#E9C46A",
 
     mainTextColor: "#2A9D8F",
-    mainHighlightColor: "#E9C46A",
+    mainHighlightColor: "#264653",
 
     correctColor:  "#F4A261",
     incorrectColor: "#E76F51",

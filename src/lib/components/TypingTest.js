@@ -1,7 +1,7 @@
 import React from 'react';
 import { getRandomWordList } from '../util/wordListGenerator';
 
-import { MainContainer, Input, RedoButton, BottomBar, Word, GlobalStyle } from './style';
+import { MainContainer, Input, RedoButton, BottomBar, Word, WPM, ACC, GlobalStyle } from './style';
 
 class TypingTest extends React.Component {
     constructor(props) {
@@ -155,8 +155,8 @@ class TypingTest extends React.Component {
                         <RedoButton id="react-typing-test-button" onClick={this.reset}>Redo</RedoButton>
                     </BottomBar>
 
-                    <span>WPM: {this.state.wpm} </span>
-                    <span>ACC: {this.state.accuracy}%</span>
+                    <WPM>WPM: {this.state.wpm} </WPM>
+                    <ACC>ACC: {this.state.accuracy}%</ACC>
                 </MainContainer>
             </Theme>
         )
